@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Poll job sources, keep Java + Spring Boot roles in Pune / Remote India /
-Remote Global, and send new ones to WhatsApp through CallMeBot.
+Remote Global, and send new ones to Telegram and/or WhatsApp (CallMeBot).
 
 Standard library only. Usage:
     python3 job_alerts.py --dry-run     # print matches, send nothing, save nothing
     python3 job_alerts.py               # send to WhatsApp and update state/seen.json
 
 Environment:
-    CALLMEBOT_PHONE, CALLMEBOT_APIKEY   required to send
+    TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID   Telegram delivery
+    CALLMEBOT_PHONE, CALLMEBOT_APIKEY      WhatsApp delivery (at least one pair is required to send)
     ADZUNA_APP_ID, ADZUNA_APP_KEY       optional, adds India-wide coverage
 """
 import argparse
@@ -398,11 +399,31 @@ def format_message(item, details):
     return "\n".join(lines)
 
 
-# ---------------------------------------------------------------- WhatsApp
-def send_whatsapp(text):
+# ---------------------------------------------------------------- delivery
+def telegram_html(text):
+    """Turn the WhatsApp-style *bold* message into Telegram HTML."""
+    escaped = html.escape(text, quote=False)
+    return re.sub(r"\*([^*\n]+)\*", r"<b>\1</b>", escaped)
+
+
+def send_telegram(text):
+    token, chat = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
+    body = urllib.parse.urlencode({
+        "chat_id": chat, "text": telegram_html(text), "parse_mode": "HTML",
+        "disable_web_page_preview": "true",
+    }).encode()
+    req = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendMessage", data=body, headers=UA)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            reply = json.load(resp)
+    except urllib.error.HTTPError as exc:
+        reply = json.loads(exc.read() or b"{}")
+    if not reply.get("ok"):
+        raise RuntimeError(f"Telegram rejected the message: {reply.get('description', reply)}")
+
+
+def send_callmebot(text):
     phone, key = os.environ.get("CALLMEBOT_PHONE"), os.environ.get("CALLMEBOT_APIKEY")
-    if not (phone and key):
-        raise RuntimeError("CALLMEBOT_PHONE and CALLMEBOT_APIKEY are not set")
     query = urllib.parse.urlencode({"phone": phone, "text": text, "apikey": key})
     try:
         body = http_get("https://api.callmebot.com/whatsapp.php?" + query, timeout=40)
@@ -412,6 +433,33 @@ def send_whatsapp(text):
     if re.search(r"apikey is invalid|error|not (?:found|valid|registered)", reply, re.I) and \
             "queued" not in reply.lower():
         raise RuntimeError(f"CallMeBot rejected the message: {strip_html(reply)[:200]}")
+
+
+def channels():
+    found = []
+    if os.environ.get("TELEGRAM_BOT_TOKEN") and os.environ.get("TELEGRAM_CHAT_ID"):
+        found.append(("Telegram", send_telegram))
+    if os.environ.get("CALLMEBOT_PHONE") and os.environ.get("CALLMEBOT_APIKEY"):
+        found.append(("WhatsApp", send_callmebot))
+    return found
+
+
+def send_alert(text):
+    """Send to every configured channel; succeed if at least one delivers."""
+    found = channels()
+    if not found:
+        raise RuntimeError("No delivery channel configured: set TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID "
+                           "and/or CALLMEBOT_PHONE + CALLMEBOT_APIKEY")
+    errors = []
+    for name, fn in found:
+        try:
+            fn(text)
+        except Exception as exc:
+            errors.append(f"{name}: {exc}")
+    if len(errors) == len(found):
+        raise RuntimeError("; ".join(errors))
+    for err in errors:
+        print(f"channel failed: {err}", file=sys.stderr)
 
 
 # ---------------------------------------------------------------- state
@@ -476,8 +524,8 @@ def main():
         CFG["max_age_days"] = args.max_age_days
 
     if args.test_message:
-        send_whatsapp("✅ Job alerts are connected. New Java + Spring Boot roles will arrive here.")
-        print("Test message sent.")
+        send_alert("✅ *Job alerts are connected.* New Java + Spring Boot roles will arrive here.")
+        print("Test message sent via: " + ", ".join(name for name, _ in channels()))
         return 0
 
     state = load_state()
@@ -513,7 +561,7 @@ def main():
             print("\n" + message)
         else:
             try:
-                send_whatsapp(message)
+                send_alert(message)
             except Exception as exc:
                 print(f"send failed, will retry next run: {exc}", file=sys.stderr)
                 break

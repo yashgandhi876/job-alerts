@@ -1,7 +1,8 @@
-# Job alerts to WhatsApp
+# Job alerts to Telegram / WhatsApp
 
 Checks job sources every 10 minutes and sends new **Java + Spring Boot** roles
-(Pune, Remote India, Remote Global; 5–9 years) to WhatsApp through CallMeBot.
+(Pune, Remote India, Remote Global; 5–9 years) to Telegram, and to WhatsApp
+through CallMeBot when that is configured. Either channel works on its own.
 
 ## What it checks
 
@@ -13,7 +14,17 @@ Checks job sources every 10 minutes and sends new **Java + Spring Boot** roles
 
 LinkedIn and Naukri are not scraped directly; both block automated access.
 
-## One-time setup
+## One-time setup: Telegram
+
+1. In Telegram, message **@BotFather**, send `/newbot`, pick a name and a username
+   ending in `bot`. It replies with a token.
+2. Run `python3 setup_telegram.py`, paste the token, then tap **Start** on your new bot.
+   The script sends a test message and saves `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`
+   as GitHub secrets.
+
+## Optional: WhatsApp via CallMeBot
+
+CallMeBot sometimes stops accepting new users ("The bot is currently full").
 
 1. **Get a CallMeBot key.** Save `+34 644 71 81 99` as a contact and send it the
    WhatsApp message `I allow callmebot to send me messages`. It replies with an API key.

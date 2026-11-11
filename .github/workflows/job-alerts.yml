@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       test_message:
-        description: "Send a test WhatsApp message instead of checking jobs"
+        description: "Send a test message instead of checking jobs"
         type: boolean
         default: false
 
@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       CALLMEBOT_PHONE: ${{ secrets.CALLMEBOT_PHONE }}
       CALLMEBOT_APIKEY: ${{ secrets.CALLMEBOT_APIKEY }}
       ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
