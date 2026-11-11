@@ -4,13 +4,14 @@
   "max_detail_fetches_per_run": 400,
 
   "experience": {
-    "candidate_min_years": 5,
-    "candidate_max_years": 9,
-    "reject_if_job_asks_less_than": 3
+    "my_years": 5.1,
+    "job_min_at_least": 4,
+    "job_max_at_most": 7,
+    "send_if_not_stated": true
   },
 
   "title_must_match": "engineer|developer|programmer|\\bsde\\b|\\bswe\\b|architect|full[\\s-]?stack|back[\\s-]?end|tech(nical)? lead|member of technical staff|\\bmts\\b|consultant",
-  "title_must_not_match": "\\bintern\\b|internship|junior|\\bjr\\b|trainee|fresher|graduate|entry[\\s-]level|apprentice|director|vice president|\\bvp\\b|head of|sales|support engineer|recruit",
+  "title_must_not_match": "\\bintern\\b|internship|junior|\\bjr\\b|trainee|fresher|graduate|entry[\\s-]level|apprentice|director|vice president|\\bvp\\b|\\bavp\\b|head of|principal|\\bstaff\\b|distinguished|architect|advisor|sales|support engineer|recruit",
 
   "title_other_stack": "\\bvue\\b|angular|python|node(\\.?js)?\\b|\\.net\\b|\\bc#|golang|\\bgo\\b|\\bphp\\b|ruby|rails|\\bios\\b|android|react native|flutter|devops|\\bsre\\b|data engineer|machine learning|\\bml\\b|\\bqa\\b|\\bsdet\\b|salesforce|\\bsap\\b|front[\\s-]?end|c\\+\\+|rust|scala|kotlin",
 

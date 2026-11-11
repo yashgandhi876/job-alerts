@@ -54,7 +54,8 @@ EXTRAS = [
     ("Kafka", re.compile(r"\bkafka\b", re.I)),
 ]
 YEARS = re.compile(
-    r"(\d{1,2})\s*(?:\+|plus)?\s*(?:(?:-|–|—|to)\s*(\d{1,2})\s*\+?\s*)?(?:years?|yrs?)\b", re.I
+    r"(?<![\d.])(\d{1,2}(?:\.\d)?)\s*(?:\+|plus)?\s*(?:(?:-|–|—|to)\s*(\d{1,2}(?:\.\d)?)\s*\+?\s*)?"
+    r"(?:years?|yrs?)\b", re.I
 )
 REMOTE_WORD = re.compile(r"remote|anywhere|worldwide|global|work from home|\bwfh\b|distributed", re.I)
 GLOBAL_WORD = re.compile(r"worldwide|anywhere|global|\bworld\b|international", re.I)
@@ -426,8 +427,8 @@ def required_years(text):
     """Highest 'N years' figure in the posting, with the top of its range if given."""
     best = None
     for match in YEARS.finditer(text):
-        low = int(match.group(1))
-        high = int(match.group(2)) if match.group(2) else None
+        low = float(match.group(1))
+        high = float(match.group(2)) if match.group(2) else None
         if low > 15 or (high is not None and high < low):
             continue
         if best is None or low > best[0]:
@@ -453,18 +454,27 @@ def evaluate(item):
     years = required_years(blob)
     if years:
         low, high = years
-        if low > exp["candidate_max_years"]:
-            return False, f"asks {low}+ years"
-        if high is not None and high < exp["candidate_min_years"]:
-            return False, f"asks {low}-{high} years"
-        if (high is None and low < exp["reject_if_job_asks_less_than"]
-                and not SENIOR_TITLE.search(item["title"])):
-            return False, f"asks only {low}+ years"
+        # Keep only jobs whose stated range fits a 4-7 year window and whose minimum
+        # you already meet: 4-6, 4-7, 5-7, 4+, 5+ pass; 3+, 3-5, 6+, 5-8 do not.
+        label = f"{low:g}-{high:g}" if high is not None else f"{low:g}+"
+        if low > exp["my_years"]:
+            return False, f"asks {label} years (above your {exp['my_years']:g})"
+        if low < exp["job_min_at_least"]:
+            return False, f"asks {label} years (below {exp['job_min_at_least']:g})"
+        if high is not None and high > exp["job_max_at_most"]:
+            return False, f"asks {label} years (range goes past {exp['job_max_at_most']:g})"
+    elif not exp["send_if_not_stated"]:
+        return False, "experience not stated"
+    elif re.search(r"\blead\b|manager", item["title"], re.I):
+        # Lead/manager titles with no stated range usually want more than 5 years.
+        return False, "lead/manager title, experience not stated"
 
     stack = ["Java", "Spring Boot"] + [name for name, rx in EXTRAS if rx.search(blob)]
     exp_label = ""
     if years:
-        exp_label = f"{years[0]}-{years[1]} yrs" if years[1] else f"{years[0]}+ yrs"
+        exp_label = f"{years[0]:g}-{years[1]:g} yrs" if years[1] else f"{years[0]:g}+ yrs"
+    else:
+        exp_label = "exp. not stated"
     return True, {"stack": stack, "experience": exp_label}
 
 
