@@ -1,5 +1,32 @@
 {
-"meta": {},
+"meta": {
+"sent_log": [
+[
+1794397437,
+"pune"
+],
+[
+1794397437,
+"pune"
+],
+[
+1794397437,
+"pune"
+],
+[
+1794397437,
+"pune"
+],
+[
+1794397437,
+"pune"
+],
+[
+1794397437,
+"pune"
+]
+]
+},
 "seen": {
 "Ashby:amplitude/e2ba3428-c5d6-4366-8cb3-da53f9d52036": 1794380019,
 "Ashby:clickhouse/68a6a77c-f289-474f-987c-42bea4faca40": 1794380019,
@@ -54,16 +81,32 @@
 "Himalayas:https://himalayas.app/companies/bright-vision-technologies/jobs/spring-boot-developer": 1794380019,
 "Himalayas:https://himalayas.app/companies/buzzmn/jobs/java-backend-developer-spring-boot-microservicios-remoto": 1794380019,
 "Himalayas:https://himalayas.app/companies/caci-international-inc/jobs/business-systems-analyst-momentum-financials-environment-specialist": 1794380019,
+"Himalayas:https://himalayas.app/companies/chomps/jobs/account-manager-e-commerce": 1794397437,
 "Himalayas:https://himalayas.app/companies/chrona/jobs/senior-java-developer-german-speaking": 1794380019,
+"Himalayas:https://himalayas.app/companies/cleargov/jobs/client-support-specialist": 1794397437,
+"Himalayas:https://himalayas.app/companies/cleargov/jobs/director-product-solution-marketing": 1794397437,
+"Himalayas:https://himalayas.app/companies/colgate/jobs/oral-care-consultant-virtual-london-eng-gb": 1794397437,
 "Himalayas:https://himalayas.app/companies/crash-champions/jobs/hris-system-analyst-1971812709": 1794380019,
 "Himalayas:https://himalayas.app/companies/cultivar-asia-pte-ltd-ea-license-19c9782/jobs/senior-java-developer": 1794380019,
 "Himalayas:https://himalayas.app/companies/davies-north-america/jobs/senior-claim-representative-claim-counsel": 1794380019,
 "Himalayas:https://himalayas.app/companies/dozuki/jobs/enterprise-inside-sales-account-executive": 1794380019,
 "Himalayas:https://himalayas.app/companies/edgewater-federal-solutions/jobs/full-stack-java-engineer-spring-angular": 1794380019,
 "Himalayas:https://himalayas.app/companies/esko/jobs/commercial-counsel": 1794380019,
+"Himalayas:https://himalayas.app/companies/fluency-inc-a92b5614-7a5c-4a66-8e47-cfdd3f504a59/jobs/instructional-designer-contractor": 1794397437,
 "Himalayas:https://himalayas.app/companies/gamivision/jobs/user-acquisition-expert": 1794380019,
 "Himalayas:https://himalayas.app/companies/global-payments/jobs/associate-field-sales-representative-spokane-wa": 1794380019,
 "Himalayas:https://himalayas.app/companies/go-intellects-inc/jobs/16yrs-senior-react-js-developer-remote-in-person-interview": 1794380019,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/arizona-work-at-home-customer-service-representative-us-8507648938": 1794397437,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/arizona-work-at-home-customer-service-sales-representative-us-3724902526": 1794397437,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/british-columbia-bilingue-francais-anglais-teletravail-representant-de-servi-169135847": 1794397437,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/british-columbia-work-home-customer-service-representative-ca-2889419199": 1794397437,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/idaho-work-at-home-customer-service-sales-representative-us-1669112365": 1794397437,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/national-work-at-home-customer-service-sales-representative-us-5575476056": 1794397437,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/nova-scotia-bilingue-francais-anglais-teletravail-representant-de-service-a-6400730069": 1794397437,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/prince-edward-bilingue-francais-anglais-teletravail-representant-de-service-7328727318": 1794397437,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/prince-edward-island-work-home-customer-service-representative-ca-776377022": 1794397437,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/spanish-bilingual-national-work-at-home-customer-service-sales-representative-5597916858": 1794397437,
+"Himalayas:https://himalayas.app/companies/hinduja-global-solutions-ltd/jobs/utah-work-at-home-customer-service-representative-us-5672886718": 1794397437,
 "Himalayas:https://himalayas.app/companies/humana/jobs/epic-technology-leadership": 1794380019,
 "Himalayas:https://himalayas.app/companies/humanit-digital-consulting/jobs/fullstack-java-react-developer-java-spring-boot-react-ai-tooling-portuga-3478653854": 1794380019,
 "Himalayas:https://himalayas.app/companies/humanit-digital-consulting/jobs/senior-fullstack-developer-react-node-js-java-spring-boot-full-remote-portug": 1794380019,
@@ -71,6 +114,7 @@
 "Himalayas:https://himalayas.app/companies/humanit-digital-consulting/jobs/senior-java-developer-spring-boot-shopify-portugal-full-remote": 1794380019,
 "Himalayas:https://himalayas.app/companies/humanit-digital-consulting/jobs/senior-lead-full-stack-engineer-java-spring-boot-react-cloud-full-remote": 1794380019,
 "Himalayas:https://himalayas.app/companies/humanit-digital-consulting/jobs/staff-java-developer-spring-boot-azure-portugal-remote": 1794380019,
+"Himalayas:https://himalayas.app/companies/imagine-worldwide/jobs/data-quality-analyst": 1794397437,
 "Himalayas:https://himalayas.app/companies/impact-care/jobs/customer-success-project-manager": 1794380019,
 "Himalayas:https://himalayas.app/companies/job-duck/jobs/v108-bilingual-pre-suit-case-manager": 1794380019,
 "Himalayas:https://himalayas.app/companies/joinready/jobs/senior-ai-software-engineer-java-spring-boot-python": 1794380019,
@@ -83,6 +127,8 @@
 "Himalayas:https://himalayas.app/companies/markettime/jobs/senior-backend-engineer-java-spring": 1794380019,
 "Himalayas:https://himalayas.app/companies/markettime/jobs/senior-backend-engineer-java-spring-remote-u-s": 1794380019,
 "Himalayas:https://himalayas.app/companies/micro1/jobs/sr-full-stack-software-engineer-579932160": 1794380019,
+"Himalayas:https://himalayas.app/companies/new-york-life-insurance-co/jobs/absence-team-leader-remote-any-state-us": 1794397437,
+"Himalayas:https://himalayas.app/companies/new-york-life-insurance-co/jobs/corporate-vice-president-national-wholesaler-remote-any-state-us": 1794397437,
 "Himalayas:https://himalayas.app/companies/pandera-systems/jobs/backend-developer-java-spring-boot-4643940408": 1794380019,
 "Himalayas:https://himalayas.app/companies/peraton/jobs/senior-ansible-automation-engineer": 1794380019,
 "Himalayas:https://himalayas.app/companies/pradeepit-consulting-services-pvt-ltd/jobs/java-spring-developer": 1794380019,
@@ -93,6 +139,7 @@
 "Himalayas:https://himalayas.app/companies/rgh-global-limited/jobs/client-success-manager": 1794380019,
 "Himalayas:https://himalayas.app/companies/sa-technologies/jobs/senior-software-engineer-java-python-aws": 1794380019,
 "Himalayas:https://himalayas.app/companies/scalejet/jobs/amazon-account-manager-6699902929": 1794380019,
+"Himalayas:https://himalayas.app/companies/springboard/jobs/u-s-recruiter": 1794397437,
 "Himalayas:https://himalayas.app/companies/sumara-technology/jobs/backend-engineer-java-spring-boot-intermediate-senior": 1794380019,
 "Himalayas:https://himalayas.app/companies/talpods/jobs/senior-software-engineer-spring-boot-remote-dubai": 1794380019,
 "Himalayas:https://himalayas.app/companies/the-gifted-company/jobs/remote-java-developer-familiar-with-java-spring-boot-sql-cloud-kubernetes-8580999192": 1794380019,
@@ -309,6 +356,7 @@
 "Remotive:2091165": 1794380019,
 "Remotive:2091166": 1794380019,
 "Remotive:2091168": 1794380019,
+"SmartRecruiters:Endava/744000152855600": 1794397437,
 "WeWorkRemotely:https://weworkremotely.com/remote-jobs/a-team-senior-independent-ai-engineer-architect": 1794380019,
 "WeWorkRemotely:https://weworkremotely.com/remote-jobs/a-team-senior-independent-software-developer-90-170-hr": 1794380019,
 "WeWorkRemotely:https://weworkremotely.com/remote-jobs/affirm-analytics-engineer-ii-full-stack-revenue-analytics": 1794380019,
@@ -424,6 +472,43 @@
 "WeWorkRemotely:https://weworkremotely.com/remote-jobs/wevote-financial-controller": 1794380019,
 "WeWorkRemotely:https://weworkremotely.com/remote-jobs/wevote-head-of-editorial-content-volunteer": 1794380019,
 "WeWorkRemotely:https://weworkremotely.com/remote-jobs/yooli-full-time-software-engineer-position-react-and-rest-1": 1794380019,
-"WeWorkRemotely:https://weworkremotely.com/remote-jobs/zoominfo-technologies-llc-principal-product-management-growth": 1794380019
+"WeWorkRemotely:https://weworkremotely.com/remote-jobs/zoominfo-technologies-llc-principal-product-management-growth": 1794380019,
+"Workday:accenture/job/Pune/Custom-Software-Engineer_ATCI-5228201-S2000240-1": 1794397437,
+"Workday:accenture/job/Pune/Custom-Software-Engineer_ATCI-5228635-S2028942-1": 1794397437,
+"Workday:accenture/job/Pune/Custom-Software-Engineer_ATCI-5878177-S2075098-1": 1794397437,
+"Workday:accenture/job/Pune/Custom-Software-Engineering-Lead_ATCI-5875328-S2074130-1": 1794397437,
+"Workday:accenture/job/Pune/Custom-Software-Engineering-Lead_ATCI-5875329-S2074127-1": 1794397437,
+"Workday:accenture/job/Pune/Custom-Software-Engineering-Lead_ATCI-5875331-S2074133-1": 1794397437,
+"Workday:accenture/job/Pune/Custom-Software-Engineering-Lead_ATCI-5875333-S2074132-1": 1794397437,
+"Workday:accenture/job/Pune/Custom-Software-Engineering-Lead_ATCI-5875334-S2074131": 1794397437,
+"Workday:accenture/job/Pune/Custom-Software-Engineering-Lead_ATCI-5875336-S2074128-1": 1794397437,
+"Workday:accenture/job/Pune/Custom-Software-Engineering-Lead_ATCI-5875337-S2074129": 1794397437,
+"Workday:citi/job/Pune-Maharashtra-India/Applications-Development-Sr-Programmer-Analyst---C12---PUNE_261005013": 1794397437,
+"Workday:citi/job/Pune-Maharashtra-India/Applications-Development-Sr-Programmer-Analyst---C12---PUNE_261005018": 1794397437,
+"Workday:citi/job/Pune-Maharashtra-India/Core-java-developer_26999186": 1794397437,
+"Workday:citi/job/Pune-Maharashtra-India/Digital-S-W-Eng-Sr-Analyst---C12---PUNE_261005060": 1794397437,
+"Workday:citi/job/Pune-Maharashtra-India/Java-Angular-Full-stack-Programmer-Analyst_26994291": 1794397437,
+"Workday:citi/job/Pune-Maharashtra-India/Java-Application-Senior-Developer_261005303": 1794397437,
+"Workday:citi/job/Pune-Maharashtra-India/Java-Fullstack-Developer_261002622": 1794397437,
+"Workday:citi/job/Pune-Maharashtra-India/Java-Senior-Application-Developer_261006503": 1794397437,
+"Workday:db/job/Pune---Business-Bay/Senior-Engineer--AVP_R0456739": 1794397437,
+"Workday:db/job/Pune---Business-Bay/Senior-Engineer--AVP_R0456747": 1794397437,
+"Workday:db/job/Pune---Margarpatta/Google-Cloud-Engineer---AVP_R0425743": 1794397437,
+"Workday:db/job/Pune---Margarpatta/Public-Websites-Requirements-Engineer--AVP_R0457218": 1794397437,
+"Workday:db/job/Pune---Margarpatta/Senior-Engineer--AVP_R0447423": 1794397437,
+"Workday:fiserv/job/Pune---Trion-Business-Park-India/Advisor--Software-Development-Engineering_R-10401215": 1794397437,
+"Workday:fiserv/job/Pune---Trion-Business-Park-India/Professional--Software-Development-Engineering_R-10401495": 1794397437,
+"Workday:ptc/job/Pune-India/QA-Technical-Lead_JR112909": 1794397437,
+"Workday:ptc/job/Pune-India/Senior-QA-Technical-Lead_JR112883": 1794397437,
+"Workday:ptc/job/Pune-India/Senior-Technical-Lead_JR112592": 1794397437,
+"Workday:ptc/job/Pune-India/Software-Technical-Consultant_JR112145": 1794397437,
+"Workday:salesforce/job/India---Bangalore/Senior-Technical-Architect--Revenue-CPQ-_JR362399": 1794397437,
+"Workday:ssctech/job/Pune-India/Lead-Software-Engineer---Java-Developer_R29662": 1794397437,
+"key:citi|javaangularfullstackprogrammeranalyst|Pune": 1794397437,
+"key:citi|javafullstackdeveloper|Pune": 1794397437,
+"key:citi|seniorengineerjavafullstack|Pune": 1794397437,
+"key:citi|seniorfullstackjavaengineer|Pune": 1794397437,
+"key:deutschebank|seniorengineeravp|Pune": 1794397437,
+"key:fiserv|professionalsoftwaredevelopmentengineering|Pune": 1794397437
 }
 }
