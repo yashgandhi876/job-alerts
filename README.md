@@ -10,6 +10,8 @@ through CallMeBot when that is configured. Either channel works on its own.
 | --- | --- |
 | RemoteOK, Remotive, Jobicy, Himalayas, We Work Remotely | Remote roles, global and India |
 | 76 company career boards (Greenhouse, Lever, Ashby) | Pune and remote roles at the companies listed in `config.json` |
+| 14 big-company career sites on Workday (Mastercard, Citi, Deutsche Bank, Accenture, Northern Trust, FIS, Fiserv, …) | Pune roles |
+| 4 career sites on SmartRecruiters (Bosch, Endava, Experian, ServiceNow) | Pune and remote roles |
 | Adzuna (optional, needs free keys) | India-wide postings, including Pune |
 
 LinkedIn and Naukri are not scraped directly; both block automated access.
@@ -48,6 +50,20 @@ python3 job_alerts.py --dry-run --verbose --max-age-days 30
 ```
 
 `--dry-run` prints matches and sends nothing. `--verbose` shows why each job was skipped.
+
+## Pune vs remote mix
+
+`mix` in `config.json` keeps remote alerts to about 15% of everything sent over the
+last 7 days (`pune_share: 0.85`). Pune matches are always sent first. Remote ones over
+the quota wait and are reconsidered on later runs while still fresh. So remote never
+goes silent when Pune is quiet, up to `remote_min_per_day` (1) remote alert per day
+gets through regardless; set it to 0 for a strict ratio.
+
+## Cost
+
+Everything is free: GitHub Actions minutes are free for public repositories, the
+Telegram Bot API is free, and every job source is a free public API (Adzuna's free tier
+if you add it).
 
 ## Tuning
 

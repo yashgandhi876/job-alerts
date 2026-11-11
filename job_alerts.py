@@ -323,6 +323,104 @@ def src_ashby(board, state, budget):
     return out
 
 
+# ---------------------------------------------------------------- big-company career sites
+def post_json(url, body, timeout=25):
+    headers = dict(UA, **{"Content-Type": "application/json", "Accept": "application/json"})
+    req = urllib.request.Request(url, data=json.dumps(body).encode(), headers=headers)
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.load(resp)
+
+
+def workday_days(label):
+    """'Posted Today' -> 0, 'Posted Yesterday' -> 1, 'Posted 3 Days Ago' -> 3, '30+' -> 30."""
+    low = (label or "").lower()
+    if "today" in low:
+        return 0
+    if "yesterday" in low:
+        return 1
+    match = re.search(r"(\d+)", low)
+    return int(match.group(1)) if match else None
+
+
+def src_workday(spec, state, budget):
+    """spec: 'tenant/wdN/site|Display Name', e.g. 'mastercard/1/CorporateCareers|Mastercard'. Pune roles only."""
+    spec, _, display = spec.partition("|")
+    tenant, num, site = spec.split("/")
+    host = f"https://{tenant}.wd{num}.myworkdayjobs.com"
+    api_base = f"{host}/wday/cxs/{tenant}/{site}"
+    first = post_json(f"{api_base}/jobs", {"appliedFacets": {}, "limit": 20, "offset": 0, "searchText": "java"})
+
+    # Find this tenant's facet IDs for Pune (facet names differ between tenants).
+    facets = {}
+    stack = list(first.get("facets", []))
+    while stack:
+        facet = stack.pop()
+        for value in facet.get("values", []):
+            if "pune" in (value.get("descriptor") or "").lower() and value.get("id"):
+                facets.setdefault(facet.get("facetParameter"), []).append(value["id"])
+            if value.get("values"):
+                # A nested group carries its own facetParameter (e.g. locationMainGroup -> locations).
+                stack.append(dict(value, facetParameter=value.get("facetParameter") or facet.get("facetParameter")))
+    if not facets:
+        return []
+
+    out, max_days = [], CFG["max_age_days"]
+    for offset in range(0, 100, 20):
+        page = post_json(f"{api_base}/jobs",
+                         {"appliedFacets": facets, "limit": 20, "offset": offset, "searchText": "java"})
+        postings = page.get("jobPostings", [])
+        for item in postings:
+            path, title = item.get("externalPath", ""), item.get("title", "")
+            jid = f"Workday:{tenant}{path}"
+            days = workday_days(item.get("postedOn"))
+            if not path or not title_ok(title) or jid in state["seen"]:
+                continue
+            if days is not None and days > max_days:
+                continue
+            if budget["left"] <= 0:
+                continue
+            budget["left"] -= 1
+            try:
+                info = get_json(f"{api_base}{path}").get("jobPostingInfo", {})
+            except Exception:
+                continue
+            posted = to_epoch(info.get("startDate")) or (NOW - (days or 0) * 86400)
+            entry = job("Workday", f"{tenant}{path}", title, display or tenant.title(),
+                        "Pune", info.get("externalUrl") or f"{host}/{site}{path}",
+                        strip_html(info.get("jobDescription")), posted)
+            entry["age_label"] = (item.get("postedOn") or "").replace("Posted ", "").lower()
+            out.append(entry)
+        if len(postings) < 20:
+            break
+    return out
+
+
+def src_smartrecruiters(company, state, budget):
+    out = []
+    base = f"https://api.smartrecruiters.com/v1/companies/{company}/postings"
+    data = get_json(f"{base}?q=java&limit=100")
+    for item in data.get("content", []):
+        loc = item.get("location") or {}
+        text_loc = ", ".join(str(loc.get(k) or "") for k in ("city", "region", "country", "fullLocation"))
+        where = classify_location(text_loc, remote=bool(loc.get("remote")))
+        title = item.get("name", "")
+        jid = f"SmartRecruiters:{company}/{item.get('id')}"
+        if not where or not title_ok(title) or jid in state["seen"] or budget["left"] <= 0:
+            continue
+        budget["left"] -= 1
+        try:
+            detail = get_json(f"{base}/{item['id']}")
+        except Exception:
+            continue
+        sections = (detail.get("jobAd") or {}).get("sections") or {}
+        text = " ".join(strip_html(sec.get("text")) for sec in sections.values() if isinstance(sec, dict))
+        company_name = (item.get("company") or {}).get("name") or company
+        out.append(job("SmartRecruiters", f"{company}/{item['id']}", title, company_name, where,
+                       f"https://jobs.smartrecruiters.com/{company}/{item['id']}", text,
+                       to_epoch(item.get("releasedDate"))))
+    return out
+
+
 # ---------------------------------------------------------------- matching
 def required_years(text):
     """Highest 'N years' figure in the posting, with the top of its range if given."""
@@ -392,7 +490,8 @@ def format_message(item, details):
         lines.append(f"🏢 {item['company']}")
     lines.append(f"📍 {item['where']} · via {item['source']}")
     lines.append("🧩 " + ", ".join(details["stack"]))
-    meta = " · ".join(part for part in (details["experience"], ago(item["posted"])) if part)
+    when = item.get("age_label") or ago(item["posted"])
+    meta = " · ".join(part for part in (details["experience"], when) if part)
     if meta:
         lines.append(f"🕒 {meta}")
     lines.append(f"🔗 {item['url']}")
@@ -497,7 +596,8 @@ def collect(state):
         ("Himalayas", src_himalayas), ("WeWorkRemotely", src_wwr),
         ("Adzuna", lambda: src_adzuna(state)),
     ]
-    for kind, fn in (("greenhouse", src_greenhouse), ("lever", src_lever), ("ashby", src_ashby)):
+    for kind, fn in (("greenhouse", src_greenhouse), ("lever", src_lever), ("ashby", src_ashby),
+                     ("workday", src_workday), ("smartrecruiters", src_smartrecruiters)):
         for board in CFG.get(kind, []):
             tasks.append((f"{kind}/{board}", lambda fn=fn, board=board: fn(board, state, budget)))
 
@@ -552,10 +652,42 @@ def main():
             continue
         queue.append((item, info))
 
-    queue.sort(key=lambda pair: pair[0]["posted"] or 0, reverse=True)
+    # Pune first (newest first), then remote: India before Global before APAC.
+    remote_rank = {"Remote (India)": 0, "Remote (Global)": 1, "Remote (APAC)": 2}
+    pune = sorted((p for p in queue if p[0]["where"] == "Pune"),
+                  key=lambda p: p[0]["posted"] or 0, reverse=True)
+    remote = sorted((p for p in queue if p[0]["where"] != "Pune"),
+                    key=lambda p: (remote_rank.get(p[0]["where"], 9), -(p[0]["posted"] or 0)))
+
+    mix = CFG["mix"]
+    window = mix["window_days"] * 86400
+    log = [entry for entry in state["meta"].get("sent_log", []) if NOW - entry[0] < window]
+    counts = {"pune": sum(1 for e in log if e[1] == "pune"), "remote": sum(1 for e in log if e[1] == "remote")}
+    remote_today = sum(1 for e in log if e[1] == "remote" and NOW - e[0] < 86400)
+
+    def remote_allowed():
+        """Keep remote at or under (1 - pune_share) of alerts over the window,
+        but let a few through each day so remote never goes completely silent."""
+        if remote_today < mix["remote_min_per_day"]:
+            return True
+        total = counts["pune"] + counts["remote"] + 1
+        return (counts["remote"] + 1) / total <= 1 - mix["pune_share"]
+
     cap = CFG["max_messages_per_run"]
+    plan, held_remote = list(pune[:cap]), 0
+    for pair in remote:
+        if len(plan) >= cap:
+            break
+        if remote_allowed():
+            plan.append(pair)
+            counts["remote"] += 1
+            remote_today += 1
+        else:
+            held_remote += 1  # not marked seen, so it is reconsidered next run while still fresh
+    counts["pune"] += sum(1 for p in plan if p[0]["where"] == "Pune")
+
     sent = 0
-    for item, info in queue[:cap]:
+    for item, info in plan:
         message = format_message(item, info)
         if args.dry_run:
             print("\n" + message)
@@ -568,11 +700,16 @@ def main():
             time.sleep(2)
         state["seen"][item["id"]] = int(NOW)
         state["seen"][dedupe_key(item)] = int(NOW)
+        log.append([int(NOW), "pune" if item["where"] == "Pune" else "remote"])
         sent += 1
+    state["meta"]["sent_log"] = log
 
     print(f"\nsources: {source_count - len(failed)}/{source_count} ok | fetched: {len(jobs)} | "
           f"new matches: {len(queue)} | {'would send' if args.dry_run else 'sent'}: {sent} | "
-          f"held for next run: {max(0, len(queue) - sent)}")
+          f"held for next run: {max(0, len(queue) - sent)} (remote over quota: {held_remote})\n"
+          f"matches by place: Pune={len(pune)} remote={len(remote)} | "
+          f"last {mix['window_days']}d sent: Pune={counts['pune'] - sum(1 for p in plan[sent:] if p[0]['where'] == 'Pune')} "
+          f"remote={sum(1 for e in log if e[1] == 'remote')}")
     if reasons:
         print("rejected (new only): " + ", ".join(f"{k}={v}" for k, v in sorted(reasons.items())))
     for line in failed:

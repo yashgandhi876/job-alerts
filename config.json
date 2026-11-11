@@ -22,6 +22,20 @@
     ]
   },
 
+  "mix": {
+    "pune_share": 0.85,
+    "window_days": 7,
+    "remote_min_per_day": 1
+  },
+
+  "workday": [
+    "mastercard/1/CorporateCareers|Mastercard", "citi/5/2|Citi", "db/3/DBWebsite|Deutsche Bank", "accenture/103/AccentureCareers|Accenture",
+    "ntrs/1/northerntrust|Northern Trust", "fis/5/SearchJobs|FIS", "ptc/1/PTC|PTC", "tiaa/1/Search|TIAA",
+    "nvidia/5/NVIDIAExternalCareerSite|NVIDIA", "salesforce/12/External_Career_Site|Salesforce", "fiserv/5/EXT|Fiserv",
+    "crowdstrike/5/crowdstrikecareers|CrowdStrike", "workday/5/Workday|Workday", "ssctech/1/SSCTechnologies|SS&C Technologies"
+  ],
+  "smartrecruiters": ["BoschGroup", "Endava", "Experian", "ServiceNow"],
+
   "greenhouse": [
     "pubmatic", "druva", "zscaler", "agoda", "rubrik", "newrelic", "thoughtworks",
     "samsara", "gitlab", "coinbase", "affirm", "databricks", "grafanalabs", "canonical",
