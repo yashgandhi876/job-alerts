@@ -2,7 +2,8 @@ name: Job alerts
 
 on:
   schedule:
-    - cron: "*/10 * * * *"   # every 10 minutes (GitHub may delay runs by a few minutes)
+    # Every 10 minutes, offset from :00 because GitHub drops many top-of-the-hour runs.
+    - cron: "3-59/10 * * * *"
   workflow_dispatch:
     inputs:
       test_message:
