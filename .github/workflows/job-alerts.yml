@@ -1,0 +1,49 @@
+name: Job alerts
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # every 10 minutes (GitHub may delay runs by a few minutes)
+  workflow_dispatch:
+    inputs:
+      test_message:
+        description: "Send a test WhatsApp message instead of checking jobs"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: job-alerts
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      CALLMEBOT_PHONE: ${{ secrets.CALLMEBOT_PHONE }}
+      CALLMEBOT_APIKEY: ${{ secrets.CALLMEBOT_APIKEY }}
+      ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+      ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Send test message
+        if: ${{ inputs.test_message }}
+        run: python3 job_alerts.py --test-message
+
+      - name: Check for new jobs
+        if: ${{ !inputs.test_message }}
+        run: python3 job_alerts.py
+
+      - name: Save which jobs were already sent
+        if: ${{ !inputs.test_message }}
+        run: |
+          git add state/seen.json
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Update seen jobs"
+            git push
+          fi
