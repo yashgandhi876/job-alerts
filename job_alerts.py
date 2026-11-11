@@ -454,11 +454,11 @@ def evaluate(item):
     years = required_years(blob)
     if years:
         low, high = years
-        # Keep only jobs whose stated range fits a 4-7 year window and whose minimum
-        # you already meet: 4-6, 4-7, 5-7, 4+, 5+ pass; 3+, 3-5, 6+, 5-8 do not.
+        # Job minimum must be 3-5.5 and any stated maximum at most 8:
+        # 3+, 4-6, 5-8, 5.5+ pass; 2+, 6+, 6-10, 5-10 do not.
         label = f"{low:g}-{high:g}" if high is not None else f"{low:g}+"
-        if low > exp["my_years"]:
-            return False, f"asks {label} years (above your {exp['my_years']:g})"
+        if low > exp["job_min_at_most"]:
+            return False, f"asks {label} years (minimum above {exp['job_min_at_most']:g})"
         if low < exp["job_min_at_least"]:
             return False, f"asks {label} years (below {exp['job_min_at_least']:g})"
         if high is not None and high > exp["job_max_at_most"]:
