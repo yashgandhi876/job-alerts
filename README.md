@@ -1,7 +1,7 @@
 # Job alerts to Telegram / WhatsApp
 
 Checks job sources every 10 minutes and sends new **Java + Spring Boot** roles
-(Pune, Remote India, Remote Global; jobs whose minimum is 3–5.5 years and maximum at most 8) to Telegram, and to WhatsApp
+(Pune, Remote India, Remote Global; any job a 5.1-year candidate fits: minimum up to 5.5, maximum at least 5.1) to Telegram, and to WhatsApp
 through CallMeBot when that is configured. Either channel works on its own.
 
 ## What it checks

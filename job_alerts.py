@@ -454,15 +454,14 @@ def evaluate(item):
     years = required_years(blob)
     if years:
         low, high = years
-        # Job minimum must be 3-5.5 and any stated maximum at most 8:
-        # 3+, 4-6, 5-8, 5.5+ pass; 2+, 6+, 6-10, 5-10 do not.
+        # Send any job your experience fits: its minimum is at most job_min_at_most (5.5,
+        # a little above your 5.1) and any stated maximum is at least my_years.
+        # 3+, 5-10, 4-12, 5.5+ pass; 6+, 6-10, 2-4 do not.
         label = f"{low:g}-{high:g}" if high is not None else f"{low:g}+"
         if low > exp["job_min_at_most"]:
             return False, f"asks {label} years (minimum above {exp['job_min_at_most']:g})"
-        if low < exp["job_min_at_least"]:
-            return False, f"asks {label} years (below {exp['job_min_at_least']:g})"
-        if high is not None and high > exp["job_max_at_most"]:
-            return False, f"asks {label} years (range goes past {exp['job_max_at_most']:g})"
+        if high is not None and high < exp["my_years"]:
+            return False, f"asks {label} years (maximum below your {exp['my_years']:g})"
     elif not exp["send_if_not_stated"]:
         return False, "experience not stated"
     elif re.search(r"\blead\b|manager", item["title"], re.I):
